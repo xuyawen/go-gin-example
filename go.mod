@@ -3,6 +3,7 @@ module github.com/xuyawen/go-gin-example
 go 1.14
 
 require (
+	github.com/astaxie/beego v1.12.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-ini/ini v1.57.0
 	github.com/go-playground/validator/v10 v10.3.0 // indirect
@@ -20,11 +21,11 @@ require (
 )
 
 replace (
-	github.com/EDDYCJY/go-gin-example/middleware  => ./middleware
-	github.com/EDDYCJY/go-gin-example/models      => ./models
-	github.com/EDDYCJY/go-gin-example/pkg/conf    => ./pkg/conf
-	github.com/EDDYCJY/go-gin-example/pkg/e       => ./pkg/e
+	github.com/EDDYCJY/go-gin-example/middleware => ./middleware
+	github.com/EDDYCJY/go-gin-example/models => ./models
+	github.com/EDDYCJY/go-gin-example/pkg/conf => ./pkg/conf
+	github.com/EDDYCJY/go-gin-example/pkg/e => ./pkg/e
 	github.com/EDDYCJY/go-gin-example/pkg/setting => ./pkg/setting
-	github.com/EDDYCJY/go-gin-example/routers     => ./routers
-	github.com/EDDYCJY/go-gin-example/util        => ./util
+	github.com/EDDYCJY/go-gin-example/routers => ./routers
+	github.com/EDDYCJY/go-gin-example/util => ./util
 )
