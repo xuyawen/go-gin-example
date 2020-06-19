@@ -8,13 +8,22 @@ import (
 	"github.com/unknwon/com"
 
 	"github.com/xuyawen/go-gin-example/models"
+	"github.com/xuyawen/go-gin-example/pkg/app"
 	"github.com/xuyawen/go-gin-example/pkg/e"
+	"github.com/xuyawen/go-gin-example/pkg/logging"
 	"github.com/xuyawen/go-gin-example/pkg/setting"
-	"github.com/xuyawen/go-gin-example/util"
+	"github.com/xuyawen/go-gin-example/pkg/util"
 )
 
-// 获取多个文章标签
+// @Summary Get multiple article tags
+// @Produce  json
+// @Param name query string false "Name"
+// @Param state query int false "State"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/tags [get]
 func GetTags(c *gin.Context) {
+	appG := app.Gin{C: c}
 	name := c.Query("name")
 
 	maps := make(map[string]interface{})
@@ -35,15 +44,19 @@ func GetTags(c *gin.Context) {
 	data["lists"] = models.GetTags(util.GetPage(c), setting.PageSize, maps)
 	data["total"] = models.GetTagTotal(maps)
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": data,
-	})
+	appG.Response(http.StatusOK, code, data)
 }
 
-// 新增文章标签
+// @Summary Add article tag
+// @Produce  json
+// @Param name body string true "Name"
+// @Param state body int false "State"
+// @Param created_by body int false "CreatedBy"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/tags [post]
 func AddTag(c *gin.Context) {
+	appG := app.Gin{C: c}
 	name := c.Query("name")
 	state := com.StrTo(c.DefaultQuery("state", "0")).MustInt()
 	createdBy := c.Query("created_by")
@@ -63,17 +76,26 @@ func AddTag(c *gin.Context) {
 		} else {
 			code = e.ERROR_EXIST_TAG
 		}
+	} else {
+		for _, err := range valid.Errors {
+			logging.Info("err.key: %s, err.message: %s", err.Key, err.Message)
+		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": make(map[string]string),
-	})
+	appG.Response(http.StatusOK, code, make(map[string]string))
 }
 
-// 修改文章标签
+// @Summary Update article tag
+// @Produce  json
+// @Param id path int true "ID"
+// @Param name body string true "Name"
+// @Param state body int false "State"
+// @Param modified_by body string true "ModifiedBy"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/tags/{id} [put]
 func EditTag(c *gin.Context) {
+	appG := app.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()
 	name := c.Query("name")
 	modifiedBy := c.Query("modified_by")
@@ -108,17 +130,23 @@ func EditTag(c *gin.Context) {
 		} else {
 			code = e.ERROR_NOT_EXIST_TAG
 		}
+	} else {
+		for _, err := range valid.Errors {
+			logging.Info("err.key: %s, err.message: %s", err.Key, err.Message)
+		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": make(map[string]string),
-	})
+	appG.Response(http.StatusOK, code, make(map[string]string))
 }
 
-// 删除文章标签
+// @Summary Delete article tag
+// @Produce  json
+// @Param id path int true "ID"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/tags/{id} [delete]
 func DeleteTag(c *gin.Context) {
+	appG := app.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()
 
 	valid := validation.Validation{}
@@ -132,11 +160,11 @@ func DeleteTag(c *gin.Context) {
 		} else {
 			code = e.ERROR_NOT_EXIST_TAG
 		}
+	} else {
+		for _, err := range valid.Errors {
+			logging.Info("err.key: %s, err.message: %s", err.Key, err.Message)
+		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": make(map[string]string),
-	})
+	appG.Response(http.StatusOK, code, make(map[string]string))
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/xuyawen/go-gin-example/models"
 	"github.com/xuyawen/go-gin-example/pkg/e"
-	"github.com/xuyawen/go-gin-example/util"
+	"github.com/xuyawen/go-gin-example/pkg/util"
 )
 
 type auth struct {
